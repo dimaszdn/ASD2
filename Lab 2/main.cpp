@@ -1,37 +1,29 @@
-#include <iostream>
 #include<Func.h>
+#include<BFS.h>
 
-template<typename T>
-void showMatrix(const std::vector<std::vector<T>>& matrix)
-{
-    for (int i = 0; i < matrix.size(); ++i)
-    {
-        for (int j = 0; j < matrix[i].size(); ++j)
-        {
-            std::cout << matrix[i][j] << " ";
-        }
-        std::cout << "\n";
-    }
-}
-
-/*Если нету у узла соседей, то крашит, учесть это*/
+#include <iostream>
 
 int main()
 {
-    std::vector<std::vector<bool>> adjMatrix = getMatrixFromFile("input.txt");
-    int start = 2;
-    for (int i = 0; i < adjMatrix.size(); ++i)
+    try
     {
-        std::cout << "Paths for node = " << i + 1 << "\n";
-        for (int j = 0; j < adjMatrix[i].size(); ++j)
+        std::vector<std::vector<bool>> adjMatrix = getMatrixFromFile("input2.txt");
+        for (int i = 0; i < adjMatrix.size(); ++i)
         {
-            if (j + 1 != i + 1)
+            std::cout << "[" << "Paths for node " << i + 1 << "]" << "\n";
+            std::vector<int> parents = bfs_search(adjMatrix, i + 1);
+
+            for (int j = 0; j < adjMatrix.size(); ++j)
             {
-                shortWay(BFS(adjMatrix, i + 1, j + 1), j + 1);
-                std::cout << "\n";
+                if (j + 1 == i + 1)
+                    continue;
+
+                showShortPath(parents, i + 1, j + 1);
             }
+            std::cout << "###################################" << "\n";
         }
-        std::cout << "###############################" << "\n";
     }
+    catch (const std::exception& ex) { std::cout << ex.what() << "\n"; }
+
     return 0;
 }
